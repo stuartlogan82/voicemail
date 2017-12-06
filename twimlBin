@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="alice" language="en-AU">
+        Please leave a message at the beep. 
+        Press the star key when finished. 
+    </Say>
+    <Record 
+        transcribe="true"
+            transcribeCallback="https://example.com/voicemail/transcription"
+        action="https://example.com/voicemail"  
+        method="POST"
+        maxLength="20"
+        finishOnKey="*"
+        />
+</Response>
