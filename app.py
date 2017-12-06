@@ -1,10 +1,10 @@
+import os
 from flask import Flask, request
 from twilio.rest import Client
-from twilio.twiml.voice_response import Record, VoiceResponse, Gather, Say
+from twilio.twiml.voice_response import Record, VoiceResponse, Gather, Say, Enqueue, Dial
 from twilio.twiml.messaging_response import Message, MessagingResponse
 from pprint import pprint
-import json
-import os
+
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ def voicemail():
     response = VoiceResponse()
     gather = Gather(action='/voicemail/options?recordSid={}'.format(data['RecordingSid']), method='POST')
     gather.say(
-        'Press 1 to keep your recording. 2 to re-record or 3 to delete and not leave a message', voice='alice', language='en-AU')
+        'Press 1 to keep your recording. 2 to re-record, or 3 to delete and not leave a message', voice='alice', language='en-AU')
     response.append(gather)
     return str(response)
 
@@ -38,8 +38,7 @@ def voicemail_options():
     elif (user_input == '2'):
         client.recordings(record_sid).delete()
         response.say('Message deleted', voice='alice', language='en-AU')
-        response.redirect(
-            'https://handler.twilio.com/twiml/EHf16e2324cd69f34884315a6fe741e1a5')
+        response.redirect('https://handler.twilio.com/twiml/EHf16e2324cd69f34884315a6fe741e1a5')     
     else:
         response.say(
             "Your message has been saved. Thanks for calling, goodbye", voice='alice', language='en-AU')
@@ -56,7 +55,7 @@ def transcription():
     )
 
     return str(message)
-
+    
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 
