@@ -45,12 +45,12 @@ def voicemail_options():
     return str(response)
 
 @app.route('/voicemail/transcription', methods=['POST'])
-def transcription():
+def transcription(to_num):
     pprint(request.values)
     body = "New message from {}:\n{}".format(request.values['From'], request.values['TranscriptionText'])
     message = client.messages.create(
-        to="+447475737643",
-        from_="+441622322065",
+        to=to_num,
+        from_=os.environ.get('TWILIO_NUMBER'),
         body=body
     )
 
